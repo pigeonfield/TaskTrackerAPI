@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using TaskTrackerAPI.DAL.DAO;
 
 namespace TaskTrackerAPI.Models
 {
-    public class Task
+    public class TaskModel
     {
         public int TaskId { get; set; }
 
@@ -23,11 +24,11 @@ namespace TaskTrackerAPI.Models
         public bool IsDone { get; set; }
 
 
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
         public int CategoryId { get; set; }
 
-        public List<Comment> Comments { get; set; }
-        = new List<Comment>();
+        public ICollection<Comment> Comments { get; set; }
+       
 
 
     }

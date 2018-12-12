@@ -13,7 +13,7 @@ namespace TaskTrackerAPI.Models
 
         public string Description { get; set; }
 
-        public List<Task> Tasks { get; set; }
-        = new List<Task>();
+        public ICollection<TaskModel> Tasks { get; set; }
+        
     }
 }

@@ -16,8 +16,6 @@ namespace TaskTrackerAPI
     {
         public static void Main(string[] args)
         {
-            var appBasePath = System.IO.Directory.GetCurrentDirectory();
-            NLog.GlobalDiagnosticsContext.Set("appbasepath", appBasePath);
             var logger = LogManager.LoadConfiguration("nlog.config").GetCurrentClassLogger();
 
 
