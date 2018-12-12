@@ -4,29 +4,38 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TaskTrackerAPI.DAL.Repositories;
 
 namespace TaskTrackerAPI.Controllers
 {
     [Route("api/tasks")]
     public class TaskController : Controller
     {
-        private ILogger<TaskController> _logger;
+        private readonly ILogger<TaskController> _logger;
+        private readonly ITaskRepository _taskRepository; 
 
-        public TaskController(ILogger<TaskController> logger)
+        public TaskController(ILogger<TaskController> logger, ITaskRepository taskRepository)
         {
             _logger = logger;
+            _taskRepository = taskRepository;
         }
 
         [HttpGet()]
         public IActionResult GetAllTasks()
         {
-            return Ok(TemporaryDataStore.DummyData.Tasks);
+            return Ok(_taskRepository);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetTask(int taskId)
+        public IActionResult ShowTask(int taskId)
         {
-            var taskToReturn = TemporaryDataStore.DummyData.Tasks.FirstOrDefault(t => t.TaskId == taskId);
+            if (taskId <= 0)
+            {
+                _logger.LogError("Incorect ID of task.");
+                return BadRequest();
+            }
+
+            var taskToReturn = _taskRepository.GetTask(taskId);
             if (taskToReturn == null)
             {
                 _logger.LogWarning($"There is no task with {taskId} id.");
@@ -39,11 +48,15 @@ namespace TaskTrackerAPI.Controllers
         }
 
         [HttpGet("categories/{categoryId}")]
-        public IActionResult GetTasksByCategory(int categoryId)
+        public IActionResult ShowTasksByCategory(int categoryId)
         {
+            if (categoryId <= 0)
+            {
+                _logger.LogError("Incorect ID of category.");
+                return BadRequest();
+            }
 
-
-            var tasksByCategory = TemporaryDataStore.DummyData.Tasks.Where(t => t.CategoryId == categoryId);
+            var tasksByCategory = _taskRepository.GetTasksByCategory(categoryId);
             if (tasksByCategory.Count() == 0)
             {
                 _logger.LogWarning($"There is no category with {categoryId} id.");
@@ -57,9 +70,9 @@ namespace TaskTrackerAPI.Controllers
         }
 
         [HttpGet("unfinished")]
-        public IActionResult GetNotDoneTasks()
+        public IActionResult Unfinished()
         {
-            var notDoneTasks = TemporaryDataStore.DummyData.Tasks.Where(t => !t.IsDone);
+            var notDoneTasks = _taskRepository.GetNotDoneTasks();
             if (notDoneTasks.Count() == 0)
             {
                 _logger.LogWarning($"There are no unfinished tasks.");
@@ -73,9 +86,9 @@ namespace TaskTrackerAPI.Controllers
         }
 
         [HttpGet("finished")]
-        public IActionResult GetDoneTasks()
+        public IActionResult Finished()
         {
-            var doneTasks = TemporaryDataStore.DummyData.Tasks.Where(t => t.IsDone);
+            var doneTasks = _taskRepository.GetDoneTasks();
             if (doneTasks.Count() == 0)
             {
                 _logger.LogWarning($"There are no finished tasks.");

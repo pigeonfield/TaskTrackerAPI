@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
+using TaskTrackerAPI.DAL.Repositories;
 
 namespace TaskTrackerAPI
 {
@@ -17,6 +18,7 @@ namespace TaskTrackerAPI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ITaskRepository, TaskRepository>();
             services.AddMvc();
         }
 
