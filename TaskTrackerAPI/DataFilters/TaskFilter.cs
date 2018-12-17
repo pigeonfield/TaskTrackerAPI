@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TaskTrackerAPI.DAL.DAO.Enums;
 
 namespace TaskTrackerAPI.DataFilters
 {
@@ -10,13 +11,13 @@ namespace TaskTrackerAPI.DataFilters
     {
         public bool? IsDone { get; set; }
         
-        public int? CategoryId { get; set; }
+        public Category? Category { get; set; }
 
         public bool IsEmpty
         {   get 
             {
                 //default (int?);
-                return (IsDone == null && CategoryId == null);
+                return (IsDone == null && Category == null);
             }
            
         }

@@ -24,7 +24,7 @@ namespace TaskTrackerAPI.DAL.Repositories
 
         public IEnumerable<TaskModel> GetFilteredResult([FromQuery] TaskFilter filter)
         {
-            if (filter.CategoryId == null)
+            if (filter.Category == null)
             {
                 return TemporaryDataStore.DummyData.Tasks.Where(t => t.IsDone == filter.IsDone);
             }
@@ -32,11 +32,11 @@ namespace TaskTrackerAPI.DAL.Repositories
             {
                 if (filter.IsDone == null)
                 {
-                    return TemporaryDataStore.DummyData.Tasks.Where(t => t.CategoryId == filter.CategoryId);
+                    return TemporaryDataStore.DummyData.Tasks.Where(t => t.Category == filter.Category);
                 }
                 else
                 {
-                    return TemporaryDataStore.DummyData.Tasks.Where(t => (t.CategoryId == filter.CategoryId && t.IsDone == filter.IsDone));   
+                    return TemporaryDataStore.DummyData.Tasks.Where(t => (t.Category == filter.Category && t.IsDone == filter.IsDone));   
                 }
             }
 

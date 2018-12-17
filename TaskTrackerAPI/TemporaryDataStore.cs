@@ -10,28 +10,12 @@ namespace TaskTrackerAPI
     {
         public static TemporaryDataStore DummyData { get; } = new TemporaryDataStore();
 
-        public List<Category> Categories { get; set; }
-               
+                       
         public List<TaskModel> Tasks { get; set; }
 
         public TemporaryDataStore()
         {
-            Categories = new List<Category>()
-            {
-                new Category()
-                {
-                    CategoryId = 1,
-                    Name = "Work",
-                    Description = "Lorem ipsum, lorem ipsum and lorem ipsum"
-                },
 
-                new Category()
-                {
-                    CategoryId = 2,
-                    Name = "Private",
-                    Description = "Lorem ipsum, lorem ipsum and lorem ipsum"
-                }
-            };
 
             Tasks = new List<TaskModel>()
             {
@@ -44,7 +28,7 @@ namespace TaskTrackerAPI
                     Date = $"{DateTime.Now:yyyy-MM-dd}",
                     Priority = 1,
                     IsDone = false,
-                    CategoryId = 2,
+                    Category = DAL.DAO.Enums.Category.Private,
                     Comments = new List<Comment>()
                     {
                         new Comment()
@@ -74,7 +58,7 @@ namespace TaskTrackerAPI
                     Priority = 3,
                     IsDone = true,
 
-                    CategoryId = 1,
+                    Category = DAL.DAO.Enums.Category.Travelling,
                     Comments = new List<Comment>()
                     {
                         new Comment()
@@ -108,7 +92,7 @@ namespace TaskTrackerAPI
                     Priority = 2,
                     IsDone = false,
 
-                    CategoryId = 2,
+                    Category = DAL.DAO.Enums.Category.Travelling,
                     Comments = new List<Comment>()
                     {
                         new Comment()
@@ -142,7 +126,7 @@ namespace TaskTrackerAPI
                     Priority = 2,
                     IsDone = true,
 
-                    CategoryId = 2,
+                    Category = DAL.DAO.Enums.Category.Private,
                     Comments = new List<Comment>()
                     {
                         new Comment()
@@ -176,7 +160,7 @@ namespace TaskTrackerAPI
                     Priority = 2,
                     IsDone = false,
 
-                    CategoryId = 2,
+                    Category = DAL.DAO.Enums.Category.Shopping,
                     Comments = new List<Comment>()
 
                 },
@@ -191,7 +175,7 @@ namespace TaskTrackerAPI
                     Priority = 2,
                     IsDone = false,
 
-                    CategoryId = 2,
+                    Category = DAL.DAO.Enums.Category.Work,
                     Comments = new List<Comment>()
                     {
                         new Comment()

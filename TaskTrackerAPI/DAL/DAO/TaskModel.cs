@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using TaskTrackerAPI.DAL.DAO;
+using TaskTrackerAPI.DAL.DAO.Enums;
 
 namespace TaskTrackerAPI.Models
 {
@@ -24,9 +25,8 @@ namespace TaskTrackerAPI.Models
         public bool IsDone { get; set; }
 
 
-        public virtual Category Category { get; set; }
-        public int CategoryId { get; set; }
-
+        public  Category Category { get; set; }
+        
         public ICollection<Comment> Comments { get; set; }
        
 
