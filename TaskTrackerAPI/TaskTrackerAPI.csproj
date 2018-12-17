@@ -16,14 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="wwwroot\Controllers\CommentController.cs" />
-    <Compile Include="wwwroot\Controllers\TaskController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="nlog-2018-12-11.log">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Controllers\CommentController.cs" />
+    <Content Include="Controllers\TaskController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +35,10 @@
     <Content Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

@@ -16,8 +16,7 @@ namespace TaskTrackerAPI
     {
         public static void Main(string[] args)
         {
-            var logger = LogManager.LoadConfiguration("nlog.config").GetCurrentClassLogger();
-
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 
             try
             {

@@ -17,7 +17,7 @@ namespace TaskTrackerAPI.Models
 
         public string LongDescription { get; set; }
 
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
 
         public int Priority { get; set; }
 

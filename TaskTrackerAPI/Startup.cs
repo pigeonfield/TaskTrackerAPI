@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using TaskTrackerAPI.DAL.Repositories;
+using TaskTrackerAPI.Models;
 
 namespace TaskTrackerAPI
 {
@@ -18,7 +19,14 @@ namespace TaskTrackerAPI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<ITaskRepository, TaskRepository>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins",
+                  builder => builder.AllowAnyOrigin());
+            });
+
+            services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddTransient<LifetimeTest>();
             services.AddMvc();
         }
 
@@ -38,11 +46,15 @@ namespace TaskTrackerAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("AllowAllOrigins");
+
             app.UseMvc();
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                await context.Response.WriteAsync("Internets are broken!" 
+                    
+                    );
             });
         }
     }

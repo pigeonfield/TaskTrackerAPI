@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TaskTrackerAPI.DataFilters;
 using TaskTrackerAPI.Models;
 
 namespace TaskTrackerAPI.DAL.Repositories
@@ -18,19 +20,27 @@ namespace TaskTrackerAPI.DAL.Repositories
             return TemporaryDataStore.DummyData.Tasks.FirstOrDefault(t => t.TaskId == taskId);
         }
 
-        public IEnumerable<TaskModel> GetTasksByCategory(int categoryId)
-        {
-            return TemporaryDataStore.DummyData.Tasks.Where(t => t.CategoryId == categoryId);
-        }
 
-        public IEnumerable<TaskModel> GetNotDoneTasks()
-        {
-            return TemporaryDataStore.DummyData.Tasks.Where(t => !t.IsDone);
-        }
 
-        public IEnumerable<TaskModel> GetDoneTasks()
+        public IEnumerable<TaskModel> GetFilteredResult([FromQuery] TaskFilter filter)
         {
-            return TemporaryDataStore.DummyData.Tasks.Where(t => t.IsDone);
+            if (filter.CategoryId == null)
+            {
+                return TemporaryDataStore.DummyData.Tasks.Where(t => t.IsDone == filter.IsDone);
+            }
+            else
+            {
+                if (filter.IsDone == null)
+                {
+                    return TemporaryDataStore.DummyData.Tasks.Where(t => t.CategoryId == filter.CategoryId);
+                }
+                else
+                {
+                    return TemporaryDataStore.DummyData.Tasks.Where(t => (t.CategoryId == filter.CategoryId && t.IsDone == filter.IsDone));   
+                }
+            }
+
+
         }
     }
 

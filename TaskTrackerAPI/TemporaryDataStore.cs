@@ -41,7 +41,7 @@ namespace TaskTrackerAPI
                     Name = "Concert",
                     ShortDescription = "Lorem Ipsum",
                     LongDescription = "Lorem ipsum and lorem ipsum",
-                    Date = DateTime.Now,
+                    Date = $"{DateTime.Now:yyyy-MM-dd}",
                     Priority = 1,
                     IsDone = false,
                     CategoryId = 2,
@@ -69,11 +69,11 @@ namespace TaskTrackerAPI
                     TaskId = 2,
                     Name = "Appointment",
                     ShortDescription = "Lorem Ipsum",
-                    LongDescription = "Lorem ipsum and lorem ipsum",
-                    Date = DateTime.Now,
+                    LongDescription = "Lorem ipsum and lorem ipsum. Central Park lorem ipsum Central park ipsum Central park, Central Park lorem, Central Park lorem,Central Park lorem, Central Park lorem",
+                    Date = $"{DateTime.Now:yyyy-MM-dd}",
                     Priority = 3,
-                    IsDone = false,
-                    
+                    IsDone = true,
+
                     CategoryId = 1,
                     Comments = new List<Comment>()
                     {
@@ -104,7 +104,7 @@ namespace TaskTrackerAPI
                     Name = "Meeting",
                     ShortDescription = "Lorem Ipsum",
                     LongDescription = "Lorem ipsum and lorem ipsum",
-                    Date = DateTime.Now,
+                    Date = $"{DateTime.Now:yyyy-MM-dd}",
                     Priority = 2,
                     IsDone = false,
 
@@ -129,6 +129,84 @@ namespace TaskTrackerAPI
                             Content = "Central Park lorem ipsum Central park ipsum Central park, Central Park lorem ipsum Central park ipsum Central park",
                             TaskId = 3
                         },
+                    }
+                },
+
+                new TaskModel()
+                {
+                    TaskId = 4,
+                    Name = "Toilet paper",
+                    ShortDescription = "Lorem Ipsum",
+                    LongDescription = "Lorem ipsum and lorem ipsum. Central Park lorem ipsum Central park ipsum Central park, Central Park lorem, Central Park lorem,Central Park lorem, Central Park lorem.Central Park lorem ipsum Central park ipsum Central park, Central Park lorem, Central Park lorem,Central Park lorem, Central Park lorem",
+                    Date = $"{DateTime.Now:yyyy-MM-dd}",
+                    Priority = 2,
+                    IsDone = true,
+
+                    CategoryId = 2,
+                    Comments = new List<Comment>()
+                    {
+                        new Comment()
+                        {
+                            CommentId = 1,
+                            Content = "Central Park ",
+                            TaskId = 3
+                        },
+                        new Comment()
+                        {
+                            CommentId = 2,
+                            Content = "Central Park lorem ipsum Central park ipsum Central park",
+                            TaskId = 3
+                        },
+                        new Comment()
+                        {
+                            CommentId = 3,
+                            Content = "Central Park lorem ipsum Central park ipsum Central park, Central Park lorem ipsum Central park ipsum Central park",
+                            TaskId = 3
+                        },
+                    }
+                },
+
+                new TaskModel()
+                {
+                    TaskId = 5,
+                    Name = "Onion smell",
+                    ShortDescription = "Lorem Ipsum",
+                    LongDescription = "Lorem ipsum and lorem ipsum",
+                    Date = $"{DateTime.Now:yyyy-MM-dd}",
+                    Priority = 2,
+                    IsDone = false,
+
+                    CategoryId = 2,
+                    Comments = new List<Comment>()
+
+                },
+
+                new TaskModel()
+                {
+                    TaskId = 6,
+                    Name = "Unicorns",
+                    ShortDescription = "Lorem Ipsum",
+                    LongDescription = "Lorem ipsum and lorem ipsum",
+                    Date = $"{DateTime.Now:yyyy-MM-dd}",
+                    Priority = 2,
+                    IsDone = false,
+
+                    CategoryId = 2,
+                    Comments = new List<Comment>()
+                    {
+                        new Comment()
+                        {
+                            CommentId = 1,
+                            Content = "Central Park ",
+                            TaskId = 3
+                        },
+                        new Comment()
+                        {
+                            CommentId = 2,
+                            Content = "Central Park lorem ipsum Central park ipsum Central park",
+                            TaskId = 3
+                        },
+
                     }
                 },
             };
