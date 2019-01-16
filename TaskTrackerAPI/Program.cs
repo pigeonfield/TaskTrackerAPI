@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
+using TaskTrackerAPI.DAL;
+using TaskTrackerAPI.DAL.DAO;
 
 namespace TaskTrackerAPI
 {
@@ -16,24 +19,17 @@ namespace TaskTrackerAPI
     {
         public static void Main(string[] args)
         {
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            var host = CreateWebHostBuilder(args).Build();
 
-            try
+            using (var scope = host.Services.CreateScope())
             {
-                logger.Debug("xxxx");
-                CreateWebHostBuilder(args).Build().Run();
-            }
-            catch (Exception ex)
-            {
+                var services = scope.ServiceProvider;
 
-                logger.Error(ex, "App was stopped because of exception");
-                throw;
+                var context = services.GetRequiredService<AppDbContext>();
+                DataInitializer.Seed(context);
             }
-            finally
-            {
 
-                NLog.LogManager.Shutdown();
-            }
+            host.Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

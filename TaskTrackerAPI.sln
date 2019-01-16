@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTrackerAPI", "TaskTrackerAPI\TaskTrackerAPI.csproj", "{D6252A30-C33C-467B-B596-58A4887D0CF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTest", "XUnitTest\XUnitTest.csproj", "{50D4C30B-D40A-4B25-9E96-90A6167DEE8B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTrackerAPI.Tests", "TaskTrackerAPI.Tests\TaskTrackerAPI.Tests.csproj", "{C56DCFEB-AEF6-4B33-B45D-F00040348B87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{D6252A30-C33C-467B-B596-58A4887D0CF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6252A30-C33C-467B-B596-58A4887D0CF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6252A30-C33C-467B-B596-58A4887D0CF9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{50D4C30B-D40A-4B25-9E96-90A6167DEE8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50D4C30B-D40A-4B25-9E96-90A6167DEE8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50D4C30B-D40A-4B25-9E96-90A6167DEE8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50D4C30B-D40A-4B25-9E96-90A6167DEE8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C56DCFEB-AEF6-4B33-B45D-F00040348B87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C56DCFEB-AEF6-4B33-B45D-F00040348B87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C56DCFEB-AEF6-4B33-B45D-F00040348B87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C56DCFEB-AEF6-4B33-B45D-F00040348B87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TaskTrackerAPI.DAL.DAO.Enums
 {
-    public enum Category
+    public enum CategoryEnum
     {
         Work = 1,
         Private = 2,

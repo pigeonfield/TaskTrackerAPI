@@ -25,10 +25,10 @@ namespace TaskTrackerAPI
                     Name = "Concert",
                     ShortDescription = "Lorem Ipsum",
                     LongDescription = "Lorem ipsum and lorem ipsum",
-                    Date = $"{DateTime.Now:yyyy-MM-dd}",
-                    Priority = 1,
+                    CreatedAt = DateTime.Now,
+                    Priority = DAL.DAO.Enums.PriorityEnum.Medium,
                     IsDone = false,
-                    Category = DAL.DAO.Enums.Category.Private,
+                    Category = DAL.DAO.Enums.CategoryEnum.Private,
                     Comments = new List<Comment>()
                     {
                         new Comment()
@@ -54,11 +54,11 @@ namespace TaskTrackerAPI
                     Name = "Appointment",
                     ShortDescription = "Lorem Ipsum",
                     LongDescription = "Lorem ipsum and lorem ipsum. Central Park lorem ipsum Central park ipsum Central park, Central Park lorem, Central Park lorem,Central Park lorem, Central Park lorem",
-                    Date = $"{DateTime.Now:yyyy-MM-dd}",
-                    Priority = 3,
+                    CreatedAt = DateTime.Now,
+                    Priority = DAL.DAO.Enums.PriorityEnum.Medium,
                     IsDone = true,
 
-                    Category = DAL.DAO.Enums.Category.Travelling,
+                    Category = DAL.DAO.Enums.CategoryEnum.Travelling,
                     Comments = new List<Comment>()
                     {
                         new Comment()
@@ -88,11 +88,11 @@ namespace TaskTrackerAPI
                     Name = "Meeting",
                     ShortDescription = "Lorem Ipsum",
                     LongDescription = "Lorem ipsum and lorem ipsum",
-                    Date = $"{DateTime.Now:yyyy-MM-dd}",
-                    Priority = 2,
+                    CreatedAt = DateTime.Now,
+                    Priority = DAL.DAO.Enums.PriorityEnum.Medium,
                     IsDone = false,
 
-                    Category = DAL.DAO.Enums.Category.Travelling,
+                    Category = DAL.DAO.Enums.CategoryEnum.Travelling,
                     Comments = new List<Comment>()
                     {
                         new Comment()
@@ -122,11 +122,11 @@ namespace TaskTrackerAPI
                     Name = "Toilet paper",
                     ShortDescription = "Lorem Ipsum",
                     LongDescription = "Lorem ipsum and lorem ipsum. Central Park lorem ipsum Central park ipsum Central park, Central Park lorem, Central Park lorem,Central Park lorem, Central Park lorem.Central Park lorem ipsum Central park ipsum Central park, Central Park lorem, Central Park lorem,Central Park lorem, Central Park lorem",
-                    Date = $"{DateTime.Now:yyyy-MM-dd}",
-                    Priority = 2,
+                    CreatedAt = DateTime.Now,
+                    Priority = DAL.DAO.Enums.PriorityEnum.Medium,
                     IsDone = true,
 
-                    Category = DAL.DAO.Enums.Category.Private,
+                    Category = DAL.DAO.Enums.CategoryEnum.Private,
                     Comments = new List<Comment>()
                     {
                         new Comment()
@@ -156,11 +156,11 @@ namespace TaskTrackerAPI
                     Name = "Onion smell",
                     ShortDescription = "Lorem Ipsum",
                     LongDescription = "Lorem ipsum and lorem ipsum",
-                    Date = $"{DateTime.Now:yyyy-MM-dd}",
-                    Priority = 2,
+                    CreatedAt = DateTime.Now,
+                    Priority = DAL.DAO.Enums.PriorityEnum.Medium,
                     IsDone = false,
 
-                    Category = DAL.DAO.Enums.Category.Shopping,
+                    Category = DAL.DAO.Enums.CategoryEnum.Shopping,
                     Comments = new List<Comment>()
 
                 },
@@ -171,11 +171,11 @@ namespace TaskTrackerAPI
                     Name = "Unicorns",
                     ShortDescription = "Lorem Ipsum",
                     LongDescription = "Lorem ipsum and lorem ipsum",
-                    Date = $"{DateTime.Now:yyyy-MM-dd}",
-                    Priority = 2,
+                    CreatedAt = DateTime.Now,
+                    Priority = DAL.DAO.Enums.PriorityEnum.Medium,
                     IsDone = false,
 
-                    Category = DAL.DAO.Enums.Category.Work,
+                    Category = DAL.DAO.Enums.CategoryEnum.Work,
                     Comments = new List<Comment>()
                     {
                         new Comment()

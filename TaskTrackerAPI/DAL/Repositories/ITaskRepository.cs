@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TaskTrackerAPI.DAL.DAO;
 using TaskTrackerAPI.DataFilters;
 using TaskTrackerAPI.Models;
 
@@ -12,10 +13,17 @@ namespace TaskTrackerAPI.DAL.Repositories
         IEnumerable<TaskModel> GetAllTasks();
 
         TaskModel GetTask(int taskId);
-
-
-
+                
         IEnumerable<TaskModel> GetFilteredResult(TaskFilter filter);
 
+        TaskModel AddTask(TaskModel task);
+
+        TaskModel UpdateTask(TaskModel taskOld, TaskModelUpdate taskNew);
+
+        TaskModel TaskIsDone(int taskId);
+
+        TaskModel DeleteTask(int taskId);
+
+       
     }
 }

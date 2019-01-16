@@ -11,13 +11,12 @@ namespace TaskTrackerAPI.DataFilters
     {
         public bool? IsDone { get; set; }
         
-        public Category? Category { get; set; }
+        public CategoryEnum? Category { get; set; }
 
         public bool IsEmpty
         {   get 
             {
-                //default (int?);
-                return (IsDone == null && Category == null);
+                 return (IsDone == null && Category == null);
             }
            
         }

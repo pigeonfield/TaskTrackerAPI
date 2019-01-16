@@ -9,30 +9,28 @@ using TaskTrackerAPI.Models;
 namespace TaskTrackerAPI.DAL.DAO
 {
 
-    public class TaskModelCreate
+    public class TaskModelUpdate
     {
-       
         [Required]
+        public int TaskId { get; set; }
+                
         [MaxLength(20)]
         public string Name { get; set; }
-
-        [Required]
+                
         [MaxLength(50)]
         public string ShortDescription { get; set; }
 
         [MaxLength(200)]
         public string LongDescription { get; set; }
-              
+
         [Required]
-        [Range(1,3)]
+        [Range(1, 3)]
         public int Priority { get; set; }
 
-        public bool IsDone { get; set; }
-      
         [Required]
+        [Range(1, 4)]
         public int Category { get; set; }
-
-
+        
     }
 
 }
