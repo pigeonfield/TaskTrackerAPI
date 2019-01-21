@@ -887,3 +887,39 @@
 2019-01-16 15:01:57.7297 Info Found 43 configuration items
 2019-01-16 15:01:57.7581 Info Configuration initialized.
 2019-01-16 15:01:57.7581 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2019-01-21 12:50:45.0222 Info Message Template Auto Format enabled
+2019-01-21 12:50:45.0357 Info Loading assembly: NLog.Web.AspNetCore
+2019-01-21 12:50:45.1751 Info Adding target File Target[allfile]
+2019-01-21 12:50:45.1751 Info Adding target File Target[ownFile-web]
+2019-01-21 12:50:45.1873 Info Configured from an XML element in C:\Users\Aleksandra\source\repos\TaskTrackerAPI\TaskTrackerAPI\bin\Debug\netcoreapp2.1\NLog.config...
+2019-01-21 12:50:45.1985 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: ownFile-web
+2019-01-21 12:50:45.1985 Info Found 43 configuration items
+2019-01-21 12:50:45.2230 Info Configuration initialized.
+2019-01-21 12:50:45.2477 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2019-01-21 13:02:31.1831 Info Message Template Auto Format enabled
+2019-01-21 13:02:31.1992 Info Loading assembly: NLog.Web.AspNetCore
+2019-01-21 13:02:31.3131 Info Adding target File Target[allfile]
+2019-01-21 13:02:31.3223 Info Adding target File Target[ownFile-web]
+2019-01-21 13:02:31.3223 Info Configured from an XML element in C:\Users\Aleksandra\source\repos\TaskTrackerAPI\TaskTrackerAPI\bin\Debug\netcoreapp2.1\NLog.config...
+2019-01-21 13:02:31.3517 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: ownFile-web
+2019-01-21 13:02:31.3517 Info Found 43 configuration items
+2019-01-21 13:02:31.3913 Info Configuration initialized.
+2019-01-21 13:02:31.4116 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2019-01-21 13:04:00.2690 Info Message Template Auto Format enabled
+2019-01-21 13:04:00.2918 Info Loading assembly: NLog.Web.AspNetCore
+2019-01-21 13:04:00.5473 Info Adding target File Target[allfile]
+2019-01-21 13:04:00.5721 Info Adding target File Target[ownFile-web]
+2019-01-21 13:04:00.5931 Info Configured from an XML element in C:\Users\Aleksandra\source\repos\TaskTrackerAPI\TaskTrackerAPI\bin\Debug\netcoreapp2.1\NLog.config...
+2019-01-21 13:04:00.6302 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: ownFile-web
+2019-01-21 13:04:00.6460 Info Found 43 configuration items
+2019-01-21 13:04:00.6848 Info Configuration initialized.
+2019-01-21 13:04:00.7131 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.
+2019-01-21 13:04:35.7317 Info Message Template Auto Format enabled
+2019-01-21 13:04:35.7630 Info Loading assembly: NLog.Web.AspNetCore
+2019-01-21 13:04:35.9291 Info Adding target File Target[allfile]
+2019-01-21 13:04:35.9291 Info Adding target File Target[ownFile-web]
+2019-01-21 13:04:35.9619 Info Configured from an XML element in C:\Users\Aleksandra\source\repos\TaskTrackerAPI\TaskTrackerAPI\bin\Debug\netcoreapp2.1\NLog.config...
+2019-01-21 13:04:35.9949 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: ownFile-web
+2019-01-21 13:04:36.0155 Info Found 43 configuration items
+2019-01-21 13:04:36.0570 Info Configuration initialized.
+2019-01-21 13:04:36.0716 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.11.8645. Product version: 4.5.11.

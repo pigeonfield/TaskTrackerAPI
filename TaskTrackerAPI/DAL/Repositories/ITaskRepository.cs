@@ -10,19 +10,19 @@ namespace TaskTrackerAPI.DAL.Repositories
 {
     public interface ITaskRepository
     {
-        IEnumerable<TaskModel> GetAllTasks();
+        Task<IEnumerable<TaskModel>> GetAllTasks();
 
-        TaskModel GetTask(int taskId);
+        Task<TaskModel> GetTask(int taskId);
                 
-        IEnumerable<TaskModel> GetFilteredResult(TaskFilter filter);
+        Task<IEnumerable<TaskModel>> GetFilteredResult(TaskFilter filter);
 
-        TaskModel AddTask(TaskModel task);
+        Task AddTask(TaskModel task);
 
-        TaskModel UpdateTask(TaskModel taskOld, TaskModelUpdate taskNew);
+        Task UpdateTask(TaskModel taskOld, TaskModel taskNew);
 
-        TaskModel TaskIsDone(int taskId);
+        Task TaskIsDone(int taskId);
 
-        TaskModel DeleteTask(int taskId);
+        Task DeleteTask(int taskId);
 
        
     }

@@ -19,32 +19,24 @@ namespace TaskTrackerAPI.Controllers
     {
         private readonly ILogger<TaskController> _logger;
         private readonly ITaskRepository _taskRepository;
-        private readonly LifetimeTest _lifetimeTest;
-        private readonly IMapper _mapper;
 
-        public TaskController(ILogger<TaskController> logger, ITaskRepository taskRepository, LifetimeTest lifetimeTest, IMapper mapper)
+
+        public TaskController(ILogger<TaskController> logger, ITaskRepository taskRepository)
         {
             _logger = logger;
             _taskRepository = taskRepository;
-            _lifetimeTest = lifetimeTest;
-            _mapper = mapper;
+
         }
-
-        [HttpGet("[action]")]
-        public IActionResult GetTimestamp([FromServices] LifetimeTest lifetimeTestAction)
-        {
-            var ret = $"Controller di: {_lifetimeTest.Timestamp.Ticks}, BLL di: {lifetimeTestAction.Timestamp.Ticks}";
-
-            return new ObjectResult(ret);
-        }
-
+        
 
         [HttpGet("{taskId?}")]
-        public IActionResult ShowTask(int? taskId)
+        public async Task<IActionResult> ShowTask(int? taskId)
         {
             if (!taskId.HasValue)
             {
-                return Ok(_taskRepository.GetAllTasks().Select(t => t.ConvertTaskToShowAllView()).ToList());
+                var nofilter = await _taskRepository.GetAllTasks();
+                var nofilterSelect = nofilter.Select(t => t.ConvertTaskToShowAllView()).ToList();
+                return Ok(nofilterSelect);
             }
             if (taskId <= 0)
             {
@@ -52,7 +44,7 @@ namespace TaskTrackerAPI.Controllers
                 return BadRequest();
             }
 
-            var taskToReturn = _taskRepository.GetTask(taskId.Value);
+            var taskToReturn = await _taskRepository.GetTask(taskId.Value);
             if (taskToReturn == null)
             {
                 _logger.LogWarning($"There is no task with {taskId} id.");
@@ -66,25 +58,31 @@ namespace TaskTrackerAPI.Controllers
 
 
         [HttpGet("[action]/{filter?}")]
-        public IActionResult GetFilteredTasks([FromQuery] TaskFilter filter)
+        public async Task<IActionResult> GetFilteredTasks([FromQuery] TaskFilter filter)
         {
             if (filter.IsEmpty)
             {
-                return Ok(_taskRepository.GetAllTasks());
+                //return Ok(_taskRepository.GetAllTasks()); 
+
+                var all = await _taskRepository.GetAllTasks();
+                return Ok(all);
             }
             else
             {
-                return Ok(_taskRepository.GetFilteredResult(filter));
+                //return Ok(_taskRepository.GetFilteredResult(filter));
+
+                var filtered = await _taskRepository.GetFilteredResult(filter);
+                return Ok(filtered);
             }
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody]TaskModelCreate task)
+        public async Task<IActionResult> Create([FromBody]TaskModelCreate task)
         {
             if (ModelState.IsValid)
             {
                 TaskModel taskToSave = task.ConvertTaskWhenCreate();
-                _taskRepository.AddTask(taskToSave);
+                await _taskRepository.AddTask(taskToSave);
 
                 return Ok(task);
             }
@@ -97,36 +95,40 @@ namespace TaskTrackerAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody]TaskModelUpdate task)
+        public async Task<IActionResult> Update([FromBody]TaskModelUpdate task)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            TaskModel taskToUpdate = _taskRepository.GetTask(task.TaskId);
+            TaskModel taskToUpdate = await _taskRepository.GetTask(task.TaskId);
 
             if (taskToUpdate == null)
             {
                 return NotFound();
             }
 
-            _taskRepository.UpdateTask(taskToUpdate, task);   
-            
+            TaskModel taskUpdated = task.ConvertTaskWhenUpdate();
+
+            await _taskRepository.UpdateTask(taskToUpdate, taskUpdated);
+                      
+
             return Ok();
         }
+
         [HttpPut("{taskId}")]
-        public IActionResult MarkTaskAsDone(int taskId)
+        public async Task<IActionResult> MarkTaskAsDone(int taskId)
         {
-             _taskRepository.TaskIsDone(taskId);
+             await _taskRepository.TaskIsDone(taskId);
              return Ok();
         }
-
+            
 
         [HttpDelete("{taskId}")]
-        public IActionResult Delete(int taskId)
+        public async Task<IActionResult> Delete(int taskId)
         {
-             _taskRepository.DeleteTask(taskId);
+            await _taskRepository.DeleteTask(taskId);
             return Ok();
         }
 
