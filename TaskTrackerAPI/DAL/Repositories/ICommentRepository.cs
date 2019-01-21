@@ -8,7 +8,10 @@ namespace TaskTrackerAPI.DAL.Repositories
 {
     public interface ICommentRepository
     {
-        IEnumerable<Comment> GetComments(int taskId);
+        Task<IEnumerable<Comment>> GetComments(int taskId);
+        Task AddComment(int taskId, Comment comment);
+        Task DeleteComment(int taskId, int commentId);
+        
     }
 }
 

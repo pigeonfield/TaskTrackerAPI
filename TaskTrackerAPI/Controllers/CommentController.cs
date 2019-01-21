@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TaskTrackerAPI.DAL.DAO;
 using TaskTrackerAPI.DAL.Repositories;
+using TaskTrackerAPI.Models;
 
 namespace TaskTrackerAPI.Controllers
 {
@@ -22,7 +24,7 @@ namespace TaskTrackerAPI.Controllers
         }
 
         [HttpGet("{taskId}/comments")]
-        public IActionResult GetComments(int taskId)
+        public async Task<IActionResult> GetAllComments(int taskId)
         {
             if (taskId <= 0)
             {
@@ -30,10 +32,33 @@ namespace TaskTrackerAPI.Controllers
                 return BadRequest();
             }
 
-            return Ok(_commentRepository.GetComments(taskId));
+            var comments = await _commentRepository.GetComments(taskId);
+            return Ok(comments);
             
         }
+               
+        [HttpPost("{taskId}/comments")]
+        public async Task<IActionResult> Create(int taskId, Comment comment)
+        {
+            if (taskId < 1)
+            {
+                return BadRequest("Error");
+            }
 
+            if (ModelState.IsValid)
+            {
+                await _commentRepository.AddComment(taskId, comment);
+                return Ok();
+            }
 
-     }
+            return Ok();
+        }
+    
+        [HttpDelete("{taskId}/comments/{commentId}")]
+        public async Task<IActionResult> DeleteCom(int taskId, int commentId)
+        {
+            await _commentRepository.DeleteComment(taskId, commentId);
+            return Ok();
+        }
+    }
 }
