@@ -20,7 +20,9 @@ namespace TaskTrackerAPI.DAL.DAO
         public bool IsDone { get; set; }
     
         public CategoryEnum Category { get; set; }
-   
+
+        public int NumberOfComments { get; set; }
+
     }
 }
 

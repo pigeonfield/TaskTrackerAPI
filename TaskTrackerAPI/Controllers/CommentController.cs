@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TaskTrackerAPI.DAL.DAO;
+using TaskTrackerAPI.DAL.ExtensionMethods;
 using TaskTrackerAPI.DAL.Repositories;
 using TaskTrackerAPI.Models;
 
@@ -38,16 +39,19 @@ namespace TaskTrackerAPI.Controllers
         }
                
         [HttpPost("{taskId}/comments")]
-        public async Task<IActionResult> Create(int taskId, Comment comment)
+        public async Task<IActionResult> Create([FromBody]CommentCreate comment, int taskId)
         {
             if (taskId < 1)
             {
                 return BadRequest("Error");
             }
 
+            comment.TaskId = taskId;
+
             if (ModelState.IsValid)
             {
-                await _commentRepository.AddComment(taskId, comment);
+                Comment commentToSave = comment.ConvertCommentWhenCreate();
+                await _commentRepository.AddComment(taskId, commentToSave);
                 return Ok();
             }
 

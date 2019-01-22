@@ -23,7 +23,7 @@ namespace TaskTrackerAPI.DAL.Repositories
 
         public async Task<IEnumerable<TaskModel>> GetAllTasks()
         {
-            return await _appDbContext.Tasks.ToListAsync();
+            return await _appDbContext.Tasks.Include(t=>t.Comments).ToListAsync();
         }
 
         public async Task<TaskModel> GetTask(int taskId)
