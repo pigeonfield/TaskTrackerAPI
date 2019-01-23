@@ -34,7 +34,7 @@ namespace TaskTrackerAPI.Controllers
         {
             if (!taskId.HasValue)
             {
-                var nofilter = await _taskRepository.GetAllTasks();
+                var nofilter =  await _taskRepository.GetAllTasks();
                 var nofilterSelect = nofilter.Select(t => t.ConvertTaskToShowAllView()).ToList();
                 return Ok(nofilterSelect);
             }
@@ -131,6 +131,54 @@ namespace TaskTrackerAPI.Controllers
             await _taskRepository.DeleteTask(taskId);
             return Ok();
         }
+
+
+        #region Comments
+
+
+        [HttpGet("{taskId}/comments")]
+        public async Task<IActionResult> GetAllComments(int taskId)
+        {
+            if (taskId <= 0)
+            {
+                _logger.LogWarning("Incorect ID of task.");
+                return BadRequest();
+            }
+
+            var comments = await _taskRepository.GetComments(taskId);
+            return Ok(comments);
+
+        }
+
+
+        [HttpPost("{taskId}/comments")]
+        public async Task<IActionResult> Create([FromBody]CommentCreate comment, int taskId)
+        {
+            if (taskId < 1)
+            {
+                return BadRequest("Error");
+            }
+
+            comment.TaskId = taskId;
+
+            if (ModelState.IsValid)
+            {
+                Comment commentToSave = comment.ConvertCommentWhenCreate();
+                await _taskRepository.AddComment(taskId, commentToSave);
+                return Ok();
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete("{taskId}/comments/{commentId}")]
+        public async Task<IActionResult> DeleteCom(int taskId, int commentId)
+        {
+            await _taskRepository.DeleteComment(taskId, commentId);
+            return Ok();
+        }
+
+        #endregion
 
     }
 

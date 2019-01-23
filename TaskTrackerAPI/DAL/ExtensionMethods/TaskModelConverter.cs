@@ -34,7 +34,7 @@ namespace TaskTrackerAPI.DAL.ExtensionMethods
                 Priority = taskModel.Priority,
                 IsDone = taskModel.IsDone,
                 Category = taskModel.Category,
-                NumberOfComments = taskModel.Comments.Count
+                NumberOfComments = taskModel.Comments.ToList().Capacity
             };
         }
 

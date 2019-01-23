@@ -49,7 +49,6 @@ namespace TaskTrackerAPI
 
             
             services.AddScoped<ITaskRepository, TaskRepository>();
-            services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddTransient<LifetimeTest>();
             services.AddMvc();
         }

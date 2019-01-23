@@ -21,18 +21,23 @@ namespace TaskTrackerAPI.DAL.Repositories
             _appDbContext = appDbContext;
         }
 
-        public async Task<IEnumerable<TaskModel>> GetAllTasks()
+        public Task<List<TaskModel>> GetAllTasks()
         {
-            return await _appDbContext.Tasks.Include(t=>t.Comments).ToListAsync();
+            //var allTasks = await _appDbContext.Tasks.AsNoTracking().ToListAsync();
+            //allTasks.ForEach(task => 
+            //    task.Comments = new List<Comment>(_appDbContext.Comments.Count(
+            //        comment => comment.TaskId == task.TaskId)));
+
+            return _appDbContext.Tasks.AsNoTracking().Include(t=>t.Comments).ToListAsync();
         }
 
-        public async Task<TaskModel> GetTask(int taskId)
+        public Task<TaskModel> GetTask(int taskId)
         {
-            return await _appDbContext.Tasks.Include(t => t.Comments).SingleOrDefaultAsync(t => t.TaskId == taskId);
+            return _appDbContext.Tasks.AsNoTracking().Include(t => t.Comments).FirstOrDefaultAsync(t => t.TaskId == taskId);
         }
         
 
-        public async Task<IEnumerable<TaskModel>> GetFilteredResult([FromQuery] TaskFilter filter)
+        public Task<List<TaskModel>> GetFilteredResult([FromQuery] TaskFilter filter)
         {
             var isModificationRequired = true;
             var queryBuilder =  isModificationRequired ?  _appDbContext.Tasks :  _appDbContext.Tasks.AsNoTracking();
@@ -46,7 +51,7 @@ namespace TaskTrackerAPI.DAL.Repositories
                 queryBuilder = queryBuilder.Where(task => task.IsDone == filter.IsDone.Value);
             }
 
-            return await queryBuilder.ToListAsync(); 
+            return queryBuilder.ToListAsync(); 
         }
 
         public async Task AddTask(TaskModel task)
@@ -58,15 +63,13 @@ namespace TaskTrackerAPI.DAL.Repositories
                     task.CreatedAt = DateTime.Now;
                 }
 
-                await _appDbContext.Tasks.AddAsync(task);
+                _appDbContext.Tasks.Add(task);
                 await _appDbContext.SaveChangesAsync();
             }
 
         }
-        //taskOld - object from db, to be edited
-        //taskNew - input 
         
-        public async Task UpdateTask(TaskModel taskOld, TaskModel taskNew)
+        public Task UpdateTask(TaskModel taskOld, TaskModel taskNew)
         {
             
             if (taskOld != null && taskNew != null)
@@ -74,42 +77,80 @@ namespace TaskTrackerAPI.DAL.Repositories
                 
                 if (!string.IsNullOrEmpty(taskNew.Name)) taskOld.Name = taskNew.Name;
                 if (!string.IsNullOrEmpty(taskNew.ShortDescription)) taskOld.ShortDescription = taskNew.ShortDescription;
-                if (taskNew.LongDescription != null) taskOld.LongDescription = taskNew.LongDescription;  // LongDesc exist
-                    //if ((taskUpdated.LongDescription).Length == 0) taskOld.LongDescription = String.Empty;                          //LongDesc is empty string
-                                                                                                                                    //LongDesc is null - do nothing
+                if (taskNew.LongDescription != null) taskOld.LongDescription = taskNew.LongDescription;  
+
                 taskOld.Priority = taskNew.Priority;
                 taskOld.Category = taskNew.Category;
-
-                await _appDbContext.SaveChangesAsync();
+                                
             }
-       
-            
+
+            return _appDbContext.SaveChangesAsync();     //?    
         }
 
-        public async Task TaskIsDone(int taskId)
+        public Task TaskIsDone(int taskId)
         {
-            TaskModel taskDone = await _appDbContext.Tasks.SingleOrDefaultAsync(t => t.TaskId == taskId);
+            TaskModel taskDone = _appDbContext.Tasks.FirstOrDefault(t => t.TaskId == taskId);
 
             if (taskDone != null)
             {
                 taskDone.IsDone = true;
-                await _appDbContext.SaveChangesAsync();
+                
             }
 
+            return _appDbContext.SaveChangesAsync();     //?
         }
 
-        public async Task DeleteTask(int taskId)
+        public Task DeleteTask(int taskId)
         {
-            TaskModel taskToDelete = await _appDbContext.Tasks.SingleOrDefaultAsync(t => t.TaskId == taskId);
+            TaskModel taskToDelete = _appDbContext.Tasks.FirstOrDefault(t => t.TaskId == taskId);
 
             if (taskToDelete != null)
             {
                 _appDbContext.Tasks.RemoveRange(taskToDelete);
-                await _appDbContext.SaveChangesAsync();
+                
             }
             
+            return _appDbContext.SaveChangesAsync();     //?
         }
 
+
+        #region Comments
+
+
+        public Task<List<Comment>> GetComments(int taskId)
+        {
+            return _appDbContext.Comments.AsNoTracking().Where(t => t.TaskId == taskId).ToListAsync();            
+        }
+
+        public Task AddComment(int taskId, Comment comment)
+        {
+            TaskModel task = _appDbContext.Tasks.Include(c => c.Comments).FirstOrDefault(t => t.TaskId == taskId);
+
+            if (task != null)
+            {
+                comment.TaskId = taskId;
+                _appDbContext.Comments.AddRange(comment);
+                
+            }
+
+            return _appDbContext.SaveChangesAsync();     //?
+        }
+
+        public Task DeleteComment(int taskId, int commentId)
+        {
+            TaskModel task = _appDbContext.Tasks.Include(c => c.Comments).FirstOrDefault(t => t.TaskId == taskId);
+
+            if (task != null)
+            {
+                Comment comment = _appDbContext.Comments.FirstOrDefault(c => c.CommentId == commentId);
+                _appDbContext.Comments.RemoveRange(comment);
+                
+            }
+
+            return _appDbContext.SaveChangesAsync();     //?
+        }
+
+        #endregion
 
     }
 

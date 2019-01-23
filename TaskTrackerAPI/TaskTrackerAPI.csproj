@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Controllers\CommentController.cs" />
     <Content Include="Controllers\TaskController.cs" />
   </ItemGroup>
 

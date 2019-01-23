@@ -10,11 +10,11 @@ namespace TaskTrackerAPI.DAL.Repositories
 {
     public interface ITaskRepository
     {
-        Task<IEnumerable<TaskModel>> GetAllTasks();
+        Task<List<TaskModel>> GetAllTasks();
 
         Task<TaskModel> GetTask(int taskId);
                 
-        Task<IEnumerable<TaskModel>> GetFilteredResult(TaskFilter filter);
+        Task<List<TaskModel>> GetFilteredResult(TaskFilter filter);
 
         Task AddTask(TaskModel task);
 
@@ -24,6 +24,12 @@ namespace TaskTrackerAPI.DAL.Repositories
 
         Task DeleteTask(int taskId);
 
-       
+
+        Task<List<Comment>> GetComments(int taskId);
+
+        Task AddComment(int taskId, Comment comment);
+
+        Task DeleteComment(int taskId, int commentId);
+
     }
 }
