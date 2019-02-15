@@ -16,13 +16,11 @@ namespace TaskTrackerAPI.DAL.DAO
         public AppDbContext(DbContextOptions<AppDbContext> options) 
             : base(options)
         {
-
+           
         }
 
-        public virtual DbSet<TaskModel> Tasks { get; set; }
+        public DbSet<TaskModel> Tasks { get; set; }
 
-        public virtual DbSet<Comment> Comments { get; set; }
-
-       
+        public DbSet<Comment> Comments { get; set; }
     }
 }

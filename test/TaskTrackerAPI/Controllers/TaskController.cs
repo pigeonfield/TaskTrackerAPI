@@ -44,7 +44,7 @@ namespace TaskTrackerAPI.Controllers
                 return BadRequest();
             }
 
-            var taskToReturn = await _taskRepository.GetTaskWithTracking(taskId.Value);
+            var taskToReturn = await _taskRepository.GetTask(taskId.Value);
             if (taskToReturn == null)
             {
                 _logger.LogWarning($"There is no task with {taskId} id.");
@@ -109,11 +109,9 @@ namespace TaskTrackerAPI.Controllers
                 return NotFound();
             }
 
-            int taskId = taskToUpdate.TaskId;
-
             TaskModel taskUpdated = task.ConvertTaskWhenUpdate();
 
-            await _taskRepository.UpdateTask(taskId, taskUpdated);
+            await _taskRepository.UpdateTask(taskToUpdate, taskUpdated);
                       
 
             return Ok();
@@ -130,11 +128,6 @@ namespace TaskTrackerAPI.Controllers
         [HttpDelete("{taskId}")]
         public async Task<IActionResult> Delete(int taskId)
         {
-            if(taskId < 1)
-            {
-                return BadRequest(nameof(taskId));
-            }
-
             await _taskRepository.DeleteTask(taskId);
             return Ok();
         }

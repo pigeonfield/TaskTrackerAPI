@@ -13,14 +13,12 @@ namespace TaskTrackerAPI.DAL.Repositories
         Task<List<TaskModel>> GetAllTasks();
 
         Task<TaskModel> GetTask(int taskId);
-
-        Task<TaskModel> GetTaskWithTracking(int taskId);
-
+                
         Task<List<TaskModel>> GetFilteredResult(TaskFilter filter);
 
         Task AddTask(TaskModel task);
 
-        Task<TaskModel> UpdateTask(int taskId, TaskModel taskNew);
+        Task UpdateTask(TaskModel taskOld, TaskModel taskNew);
 
         Task TaskIsDone(int taskId);
 
@@ -32,7 +30,6 @@ namespace TaskTrackerAPI.DAL.Repositories
         Task AddComment(int taskId, Comment comment);
 
         Task DeleteComment(int taskId, int commentId);
-
 
     }
 }

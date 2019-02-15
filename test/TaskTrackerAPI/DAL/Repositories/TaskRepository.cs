@@ -33,13 +33,9 @@ namespace TaskTrackerAPI.DAL.Repositories
 
         public Task<TaskModel> GetTask(int taskId)
         {
-            return _appDbContext.Tasks.Include(t => t.Comments).AsNoTracking().FirstOrDefaultAsync(t => t.TaskId == taskId);
+            return _appDbContext.Tasks.AsNoTracking().Include(t => t.Comments).FirstOrDefaultAsync(t => t.TaskId == taskId);
         }
-
-        public Task<TaskModel> GetTaskWithTracking(int taskId)
-        {
-            return _appDbContext.Tasks.Include(t => t.Comments).FirstOrDefaultAsync(t => t.TaskId == taskId);
-        }
+        
 
         public Task<List<TaskModel>> GetFilteredResult([FromQuery] TaskFilter filter)
         {
@@ -55,7 +51,6 @@ namespace TaskTrackerAPI.DAL.Repositories
                 queryBuilder = queryBuilder.Where(task => task.IsDone == filter.IsDone.Value);
             }
 
-             
             return queryBuilder.ToListAsync(); 
         }
 
@@ -74,42 +69,35 @@ namespace TaskTrackerAPI.DAL.Repositories
 
         }
         
-        public async Task<TaskModel> UpdateTask(int taskId, TaskModel taskNew)
+        public Task UpdateTask(TaskModel taskOld, TaskModel taskNew)
         {
-            var taskOld = _appDbContext.Tasks.FirstOrDefault(task => task.TaskId == taskId);
-            if(taskOld == null)
-            {
-                return null;
-            }
-
+            
             if (taskOld != null && taskNew != null)
-            {                
+            {
+                
                 if (!string.IsNullOrEmpty(taskNew.Name)) taskOld.Name = taskNew.Name;
                 if (!string.IsNullOrEmpty(taskNew.ShortDescription)) taskOld.ShortDescription = taskNew.ShortDescription;
                 if (taskNew.LongDescription != null) taskOld.LongDescription = taskNew.LongDescription;  
 
                 taskOld.Priority = taskNew.Priority;
-                taskOld.Category = taskNew.Category;                                
+                taskOld.Category = taskNew.Category;
+                                
             }
 
-            if ((await _appDbContext.SaveChangesAsync()) == 0)
-                return null;
-
-            return taskOld;
+            return _appDbContext.SaveChangesAsync();     //?    
         }
 
         public Task TaskIsDone(int taskId)
         {
             TaskModel taskDone = _appDbContext.Tasks.FirstOrDefault(t => t.TaskId == taskId);
 
-            if (taskDone == null)
+            if (taskDone != null)
             {
-                throw new Exception();
+                taskDone.IsDone = true;
+                
             }
 
-            taskDone.IsDone = true;
-            return _appDbContext.SaveChangesAsync();
-
+            return _appDbContext.SaveChangesAsync();     //?
         }
 
         public Task DeleteTask(int taskId)

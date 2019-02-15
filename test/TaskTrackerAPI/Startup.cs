@@ -70,23 +70,19 @@ namespace TaskTrackerAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseExceptionHandler("Something went wrong.");
-            }
 
             app.UseCors("AllowAllOrigins");
 
             appCtx.Seed();
 
             app.UseStatusCodePages();
-            //mvc exception handler on app level
+
             app.UseMvc();
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Internets are broken!"
-
+                await context.Response.WriteAsync("Internets are broken!" 
+                    
                     );
             });
         }
