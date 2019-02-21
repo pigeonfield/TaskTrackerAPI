@@ -44,7 +44,7 @@ namespace TaskTrackerAPI.Controllers
                 return BadRequest();
             }
 
-            var taskToReturn = await _taskRepository.GetTaskWithTracking(taskId.Value);
+            var taskToReturn = await _taskRepository.GetTask(taskId.Value);
             if (taskToReturn == null)
             {
                 _logger.LogWarning($"There is no task with {taskId} id.");
@@ -62,15 +62,13 @@ namespace TaskTrackerAPI.Controllers
         {
             if (filter.IsEmpty)
             {
-                //return Ok(_taskRepository.GetAllTasks()); 
-
+               
                 var all = await _taskRepository.GetAllTasks();
                 return Ok(all);
             }
             else
             {
-                //return Ok(_taskRepository.GetFilteredResult(filter));
-
+                            
                 var filtered = await _taskRepository.GetFilteredResult(filter);
                 return Ok(filtered);
             }
@@ -122,7 +120,7 @@ namespace TaskTrackerAPI.Controllers
         [HttpPut("{taskId}")]
         public async Task<IActionResult> MarkTaskAsDone(int taskId)
         {
-             await _taskRepository.TaskIsDone(taskId);
+             await _taskRepository.MarkTaskAsDone(taskId);
              return Ok();
         }
             

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskTrackerAPI.AppExceptions;
 using TaskTrackerAPI.DAL.DAO;
 using TaskTrackerAPI.DAL.Repositories;
 using TaskTrackerAPI.DataFilters;
@@ -193,12 +194,12 @@ namespace TaskTrackerAPI.Tests.Repositories
 
             if (!_appDbContext.Tasks.Any())
             {
-                
+
 
                 _appDbContext.Tasks.AddRange(_data);
                 _appDbContext.SaveChanges();
 
-                
+
 
                 Sut = new TaskRepository(_appDbContext);
             }
@@ -259,10 +260,7 @@ namespace TaskTrackerAPI.Tests.Repositories
         [Fact]
         public async Task GetAllWhenFilterIsNull()
         {
-            TaskFilter filter = new TaskFilter
-            {
-
-            };
+            TaskFilter filter = new TaskFilter { };
 
             List<TaskModel> tasks = await Sut.GetFilteredResult(filter);
 
@@ -338,7 +336,7 @@ namespace TaskTrackerAPI.Tests.Repositories
             int numberOfRecordsBeforeAdd = _appDbContext.Tasks.Count();
 
             await Sut.AddTask(newTask);
-            
+
             int numberOfRecordsAfterAdd = _appDbContext.Tasks.Count();
             var addedRecord = _appDbContext.Tasks.Last();
 
@@ -360,7 +358,7 @@ namespace TaskTrackerAPI.Tests.Repositories
             {
                 Priority = DAL.DAO.Enums.PriorityEnum.High,
                 CreatedAt = DateTime.Now,
-                                
+
             };
 
             int numberOfRecordsBeforeAdd = _appDbContext.Tasks.Count();
@@ -384,29 +382,53 @@ namespace TaskTrackerAPI.Tests.Repositories
         #endregion
 
         #region UpdateTask Tests 
-        
+
         [Fact]
-        public async Task TaskToUpdateNotExist()    // todo: czy to ma sens? 
+        public async Task TaskToUpdateNotExist()
         {
             TaskModel taskEdited = new TaskModel
-            
             {
                 Name = "Dupa",
+                ShortDescription = "DupaDupa",
+                LongDescription = "DupaDupaDupa",
                 Priority = DAL.DAO.Enums.PriorityEnum.High,
-                Category = DAL.DAO.Enums.CategoryEnum.Shopping,
-
+                CreatedAt = DateTime.Now,
+                IsDone = false,
+                Category = DAL.DAO.Enums.CategoryEnum.Work,
+                Comments = new List<Comment>()
             };
 
-            TaskModel taskToUpdate = await Sut.GetTaskWithTracking(int.MaxValue);
-            TaskModel result = await Sut.UpdateTask(taskToUpdate.TaskId, taskEdited);
-
-            Assert.Null(result);
+            Func<Task> result = () => Sut.UpdateTask(int.MaxValue, taskEdited);
+            await Assert.ThrowsAsync<TaskNotFoundException>(result);
         }
+
+        //[Fact]
+        //public async Task TaskToUpdateNotExist()
+        //{
+        //    TaskModel taskEdited = new TaskModel
+        //    {
+        //        Name = "Dupa",
+        //        ShortDescription = "DupaDupa",
+        //        LongDescription = "DupaDupaDupa",
+        //        Priority = DAL.DAO.Enums.PriorityEnum.High,
+        //        CreatedAt = DateTime.Now,
+        //        IsDone = false,
+        //        Category = DAL.DAO.Enums.CategoryEnum.Work,
+        //        Comments = new List<Comment>()
+
+        //    };
+
+        //    Action result = async () => await Sut.UpdateTask(int.MaxValue, taskEdited);
+        //    Assert.Throws<TaskNotFoundException>(result);
+
+
+        //}
 
         [Fact]
         public async Task UpdateTaskTestsPassed()
         {
-            int numberOfRecordsBeforeAdd = _appDbContext.Tasks.First().TaskId;
+            int numberOfRecord = _appDbContext.Tasks.First().TaskId;
+            TaskModel taskToUpdate = _appDbContext.Tasks.FirstOrDefault(t => t.TaskId == numberOfRecord);
 
             TaskModel taskEdited = new TaskModel
 
@@ -414,13 +436,10 @@ namespace TaskTrackerAPI.Tests.Repositories
                 Name = "Name",
                 Priority = DAL.DAO.Enums.PriorityEnum.High,
                 Category = DAL.DAO.Enums.CategoryEnum.Shopping,
-
             };
 
-            TaskModel taskToUpdate = await Sut.GetTaskWithTracking(numberOfRecordsBeforeAdd);
             await Sut.UpdateTask(taskToUpdate.TaskId, taskEdited);
 
-            Assert.NotNull(taskToUpdate);
             Assert.Equal(taskEdited.Name, taskToUpdate.Name);
             Assert.Equal(taskEdited.Priority, taskToUpdate.Priority);
             Assert.Equal(taskEdited.Category, taskToUpdate.Category);
@@ -429,44 +448,74 @@ namespace TaskTrackerAPI.Tests.Repositories
         [Fact]
         public async Task UpdateTaskDeleteLongDesc()
         {
-            int numberOfRecordsBeforeAdd = _appDbContext.Tasks.First().TaskId;
 
             TaskModel taskEdited = new TaskModel
             {
                 LongDescription = String.Empty
             };
 
-            TaskModel taskToUpdate = await Sut.GetTask(numberOfRecordsBeforeAdd);
+            int numberOfRecord = _appDbContext.Tasks.First().TaskId;
+            TaskModel taskToUpdate = _appDbContext.Tasks.FirstOrDefault(t => t.TaskId == numberOfRecord);
+
 
             string longDescBeforeUpdate = taskToUpdate.LongDescription;
             Assert.NotEmpty(longDescBeforeUpdate);
 
             var updateModel = await Sut.UpdateTask(taskToUpdate.TaskId, taskEdited);
-            
-            TaskModel taskAfterUpdate = await Sut.GetTask(numberOfRecordsBeforeAdd);
 
-            Assert.NotNull(taskAfterUpdate);
+            TaskModel taskAfterUpdate = _appDbContext.Tasks.FirstOrDefault(t => t.TaskId == numberOfRecord);
+
             Assert.Empty(taskAfterUpdate.LongDescription);
 
-            Assert.NotNull(updateModel);
-            Assert.Empty(updateModel.LongDescription);
-
-            Assert.NotNull(taskToUpdate);
-            Assert.Empty(taskToUpdate.LongDescription);
 
         }
         #endregion
 
         #region MarkTaskAsDone Tests 
 
+        [Fact]
+        public async Task MarkTaskAsDoneTestPassed()
+        {
+            int numberOfRecord = _appDbContext.Tasks.First().TaskId;
+            TaskModel taskToUpdate = _appDbContext.Tasks.FirstOrDefault(t => t.TaskId == numberOfRecord);
 
+            Assert.False(taskToUpdate.IsDone);
+
+            await Sut.MarkTaskAsDone(taskToUpdate.TaskId);
+
+            Assert.True(taskToUpdate.IsDone);
+
+        }
+
+        [Fact]
+        public void MarkTaskAsDoneTestFailed()
+        {
+            Action result = () => Sut.MarkTaskAsDone(int.MaxValue);
+            Assert.Throws<TaskNotFoundException>(result);
+        }
+
+        [Fact]
+        public void MarkTaskAsDoneTestFailedNegativeID()
+        {
+            Action result = () => Sut.MarkTaskAsDone(-4);
+            Assert.Throws<ArgumentOutOfRangeException>(result);
+        }
 
         #endregion
 
 
         #region DeleteTask Tests 
 
+        [Fact]
+        public async Task DeleteExistingTask()
+        {
+            int numberOfRecord = _appDbContext.Tasks.First().TaskId;
 
+            await Sut.DeleteTask(numberOfRecord);
+
+            Assert.DoesNotContain(_appDbContext.Tasks, task => task.TaskId == numberOfRecord);
+
+        }
 
         #endregion
 

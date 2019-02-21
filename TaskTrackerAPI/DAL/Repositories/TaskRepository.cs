@@ -9,6 +9,7 @@ using TaskTrackerAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using TaskTrackerAPI.DAL.ExtensionMethods;
 using TaskTrackerAPI.DAL.DAO.Enums;
+using TaskTrackerAPI.AppExceptions;
 
 namespace TaskTrackerAPI.DAL.Repositories
 {
@@ -31,15 +32,12 @@ namespace TaskTrackerAPI.DAL.Repositories
             return _appDbContext.Tasks.AsNoTracking().Include(t=>t.Comments).ToListAsync();
         }
 
-        public Task<TaskModel> GetTask(int taskId)
+        public Task<TaskModel> GetTask(int taskId, bool isWithTracking = false)
         {
-            return _appDbContext.Tasks.Include(t => t.Comments).AsNoTracking().FirstOrDefaultAsync(t => t.TaskId == taskId);
+            var querySource = isWithTracking ? _appDbContext.Tasks : _appDbContext.Tasks.AsNoTracking();
+            return querySource.Include(t => t.Comments).FirstOrDefaultAsync(t => t.TaskId == taskId);
         }
 
-        public Task<TaskModel> GetTaskWithTracking(int taskId)
-        {
-            return _appDbContext.Tasks.Include(t => t.Comments).FirstOrDefaultAsync(t => t.TaskId == taskId);
-        }
 
         public Task<List<TaskModel>> GetFilteredResult([FromQuery] TaskFilter filter)
         {
@@ -54,8 +52,7 @@ namespace TaskTrackerAPI.DAL.Repositories
             {
                 queryBuilder = queryBuilder.Where(task => task.IsDone == filter.IsDone.Value);
             }
-
-             
+                         
             return queryBuilder.ToListAsync(); 
         }
 
@@ -76,14 +73,14 @@ namespace TaskTrackerAPI.DAL.Repositories
         
         public async Task<TaskModel> UpdateTask(int taskId, TaskModel taskNew)
         {
-            var taskOld = _appDbContext.Tasks.FirstOrDefault(task => task.TaskId == taskId);
-            if(taskOld == null)
+            TaskModel taskOld = _appDbContext.Tasks.FirstOrDefault(task => task.TaskId == taskId);
+            if (taskOld == null)
             {
-                return null;
+                throw new TaskNotFoundException($"Task with {taskId} ID does not exist.");
             }
 
             if (taskOld != null && taskNew != null)
-            {                
+            {
                 if (!string.IsNullOrEmpty(taskNew.Name)) taskOld.Name = taskNew.Name;
                 if (!string.IsNullOrEmpty(taskNew.ShortDescription)) taskOld.ShortDescription = taskNew.ShortDescription;
                 if (taskNew.LongDescription != null) taskOld.LongDescription = taskNew.LongDescription;  
@@ -95,16 +92,20 @@ namespace TaskTrackerAPI.DAL.Repositories
             if ((await _appDbContext.SaveChangesAsync()) == 0)
                 return null;
 
-            return taskOld;
+            return taskOld;            
         }
+        
 
-        public Task TaskIsDone(int taskId)
+        public Task MarkTaskAsDone(int taskId)
         {
+            if (taskId < 1)
+                throw new ArgumentOutOfRangeException(nameof(taskId));
+
             TaskModel taskDone = _appDbContext.Tasks.FirstOrDefault(t => t.TaskId == taskId);
 
             if (taskDone == null)
             {
-                throw new Exception();
+                throw new TaskNotFoundException($"Task with {taskId} ID does not exist.");
             }
 
             taskDone.IsDone = true;
@@ -122,7 +123,7 @@ namespace TaskTrackerAPI.DAL.Repositories
                 
             }
             
-            return _appDbContext.SaveChangesAsync();     //?
+            return _appDbContext.SaveChangesAsync();  
         }
 
 
@@ -145,7 +146,7 @@ namespace TaskTrackerAPI.DAL.Repositories
                 
             }
 
-            return _appDbContext.SaveChangesAsync();     //?
+            return _appDbContext.SaveChangesAsync();    
         }
 
         public Task DeleteComment(int taskId, int commentId)
@@ -159,7 +160,7 @@ namespace TaskTrackerAPI.DAL.Repositories
                 
             }
 
-            return _appDbContext.SaveChangesAsync();     //?
+            return _appDbContext.SaveChangesAsync();    
         }
 
         #endregion

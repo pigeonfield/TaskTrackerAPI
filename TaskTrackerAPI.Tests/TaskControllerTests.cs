@@ -26,7 +26,7 @@ namespace TaskTrackerAPI.Tests
                 .Verifiable();
 
             _taskRepository.
-                Setup(repo => repo.TaskIsDone(It.IsAny<int>()))
+                Setup(repo => repo.MarkTaskAsDone(It.IsAny<int>()))
                 .Returns(Task.CompletedTask)
                 .Verifiable();
 
