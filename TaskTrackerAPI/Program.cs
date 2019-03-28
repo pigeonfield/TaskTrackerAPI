@@ -26,6 +26,7 @@ namespace TaskTrackerAPI
                 var services = scope.ServiceProvider;
 
                 var context = services.GetRequiredService<AppDbContext>();
+                context.Database.EnsureCreated();
                 DataInitializer.Seed(context);
             }
 

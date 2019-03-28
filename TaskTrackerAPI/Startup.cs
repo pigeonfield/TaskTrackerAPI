@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Data.SqlClient;
 using System.Reflection;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,7 +29,14 @@ namespace TaskTrackerAPI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                string sqlConnectionString = Configuration.GetConnectionString("SqlServerConnection");
+                if (IsServerConnected(sqlConnectionString))
+                    options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection"));
+                else
+                    options.UseNpgsql(Configuration.GetConnectionString("PostgresSqlConnection"));
+            });
 
             services.AddAutoMapper(
                 opt => opt.CreateMissingTypeMaps = true,
@@ -45,19 +49,35 @@ namespace TaskTrackerAPI
                 options.AddPolicy("AllowAllOrigins",
                   builder => builder.AllowAnyOrigin());
             });
-            
-            
+
+
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddTransient<LifetimeTest>();
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
+        private static bool IsServerConnected(string connectionString)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    return true;
+                }
+                catch (SqlException)
+                {
+                    return false;
+                }
+            }
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IMapper autoMapper, AppDbContext appCtx )
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IMapper autoMapper, AppDbContext appCtx)
         {
             autoMapper.ConfigurationProvider.AssertConfigurationIsValid();
 
-            loggerFactory.AddConsole(); 
+            loggerFactory.AddConsole();
 
             loggerFactory.AddDebug();
 
